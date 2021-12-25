@@ -1,0 +1,41 @@
+name: Branch
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+env:
+  PYTHON_VERSION: 3.8
+  POETRY_VERSION: 1.1.11
+  PIP_VERSION: 21.3.1
+
+jobs:
+
+  test:
+
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Set up python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install poetry
+        run: |
+          pip install --no-cache-dir -U pip==${{ env.PIP_VERSION }}
+          pip install --no-cache-dir poetry==${{ env.POETRY_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          export POETRY_VIRTUALENVS_CREATE=false
+          poetry install --no-root --no-interaction --no-ansi
+
+      - name: Run tests
+        run: make test
