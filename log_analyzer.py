@@ -37,7 +37,7 @@ def parse_config(config_path: str, default_config: ConfigType) -> ConfigType:
     except json.JSONDecodeError as err:
         raise Exception(f"Unable to decode JSON: {err}")
     if not config:
-        logging.warning("Provided config file is empty, applying default configuration")
+        logging.info("Provided config file is empty, applying default configuration")
         return default_config
     return {**default_config, **config}
 
@@ -56,7 +56,7 @@ def parse_log_filename(match: Optional[Match[AnyStr]]) -> Tuple[Optional[date], 
     try:
         file_date = datetime.strptime(file_date_str, "%Y%m%d").date()
     except ValueError:
-        logging.warning(f"Unable to parse date from {file_date_str}")
+        logging.info(f"Unable to parse date from {file_date_str}")
         file_date = None
     return file_date, file_extension
 
